@@ -42,12 +42,12 @@ getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: 
 
 
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
-bindir     = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/MozartGame/MozartGame/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/bin"
-libdir     = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/MozartGame/MozartGame/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/lib/x86_64-linux-ghc-9.2.7/PortMidi-0.2.0.0-GbWO5j5hLDw6QbQ0nFVlvE"
-dynlibdir  = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/MozartGame/MozartGame/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/lib/x86_64-linux-ghc-9.2.7"
-datadir    = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/MozartGame/MozartGame/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/share/x86_64-linux-ghc-9.2.7/PortMidi-0.2.0.0"
-libexecdir = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/MozartGame/MozartGame/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/libexec/x86_64-linux-ghc-9.2.7/PortMidi-0.2.0.0"
-sysconfdir = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/MozartGame/MozartGame/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/etc"
+bindir     = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/bin"
+libdir     = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/lib/x86_64-linux-ghc-9.2.7/PortMidi-0.2.0.0-GbWO5j5hLDw6QbQ0nFVlvE"
+dynlibdir  = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/lib/x86_64-linux-ghc-9.2.7"
+datadir    = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/share/x86_64-linux-ghc-9.2.7/PortMidi-0.2.0.0"
+libexecdir = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/libexec/x86_64-linux-ghc-9.2.7/PortMidi-0.2.0.0"
+sysconfdir = "/home/cyranhoe/Documents/S6/IN032_Programmation Compar\233e/Projet/ProjectMozart/.stack-work/install/x86_64-linux-tinfo6/9abe3dba8c08b28b20ff03f21c639bdb8fc5cded8f9a6f1647257bec326f5d42/9.2.7/etc"
 
 getBinDir     = catchIO (getEnv "PortMidi_bindir")     (\_ -> return bindir)
 getLibDir     = catchIO (getEnv "PortMidi_libdir")     (\_ -> return libdir)
