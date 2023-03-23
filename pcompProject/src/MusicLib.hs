@@ -18,7 +18,7 @@ getDur (Note p d v) = d
 getDur (Chord onset elems) = foldl max 0 (map getDur elems)
 getDur (Measure elems) = foldl max 0 (map (\x -> (getDur x) + (getOnset x)) elems)
 
---Retourne le nombre de notes d’un objet musical. TEST PAS BON
+--Retourne le nombre de notes d’un objet musical. TEST OK
 noteCount :: MusObj -> Integer
 noteCount (Note pd d v) = 1
 noteCount (Chord onset elems) = foldl (\x y-> x + y) 0 (map noteCount elems)
