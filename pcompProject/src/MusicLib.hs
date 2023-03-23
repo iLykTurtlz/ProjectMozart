@@ -21,8 +21,8 @@ getDur (Measure elems) = foldl max 0 (map (\x -> (getDur x) + (getOnset x)) elem
 --Retourne le nombre de notes d’un objet musical. TEST PAS BON
 noteCount :: MusObj -> Integer
 noteCount (Note pd d v) = 1
-noteCount (Chord onset elems) = foldl (\x y-> noteCount y) 0 elems
-noteCount (Measure elems) = foldl (\x y -> noteCount y) 0 elems
+noteCount (Chord onset elems) = foldl (\x y-> x + y) 0 (map noteCount elems)
+noteCount (Measure elems) = foldl (\x y -> x + y) 0 (map noteCount elems)
 
 --Retourne un nouvel objet musical dont la durée a été multipliée par un facteur flottant.
 stretch :: MusObj -> Float -> MusObj
