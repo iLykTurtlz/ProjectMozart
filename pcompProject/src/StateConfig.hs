@@ -6,7 +6,3 @@ data GameConfig = GameConfig{
     device :: Int
 }
 
---Configure l'instrument à la valeur voulue
-confInst :: State GameConfig Int
-confInst = do
-    config <- get 
