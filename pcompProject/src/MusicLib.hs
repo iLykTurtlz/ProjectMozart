@@ -18,11 +18,11 @@ getDur (Note p d v) = d
 getDur (Chord onset elems) = foldl max 0 (map getDur elems)
 getDur (Measure elems) = foldl max 0 (map (\x -> (getDur x) + (getOnset x)) elems)
 
---Retourne le nombre de notes d’un objet musical.
+--Retourne le nombre de notes d’un objet musical. TEST OK
 noteCount :: MusObj -> Integer
 noteCount (Note pd d v) = 1
-noteCount (Chord onset elems) = foldl (\x y -> noteCount y) 0 elems
-noteCount (Measure elems) = foldl (\x y -> noteCount y) 0 elems
+noteCount (Chord onset elems) = foldl (\x y-> x + y) 0 (map noteCount elems)
+noteCount (Measure elems) = foldl (\x y -> x + y) 0 (map noteCount elems)
 
 --Retourne un nouvel objet musical dont la durée a été multipliée par un facteur flottant.
 stretch :: MusObj -> Float -> MusObj
@@ -43,3 +43,14 @@ mirror :: MusObj -> Integer -> MusObj
 mirror (Note pd d v)  h = (Note (pd - (h-pd)) d v)
 mirror (Chord onset elems)  h = Chord onset (map (\x -> mirror x h) elems)
 mirror (Measure elems)  h = Measure (map (\x -> mirror x h) elems)
+
+
+mesure_test :: MusObj
+mesure_test = Measure [
+            (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)]),
+            (Chord 292 [(Note 78 370 78)]),
+            (Chord 601 [(Note 76 300 91),(Note 43 585 83),(Note 55 588 98)]),
+            (Chord 910 [(Note 79 335 96)]),
+            (Chord 1189 [(Note 73 342 86),(Note 57 595 76),(Note 45 607 83)]),
+            (Chord 1509 [(Note 76 280 93)])]
+
