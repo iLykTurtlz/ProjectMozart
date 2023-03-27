@@ -1,3 +1,6 @@
+module StateConfig where
+
+
 data GameConfig = GameConfig{
     instrument :: Int
     mode :: Int
