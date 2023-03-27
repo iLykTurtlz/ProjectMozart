@@ -16,12 +16,12 @@ main = do
   initialize
   n <- countDevices
   midiDevicePrint (n - 1)
-  deviceId <- getDefaultOutputDeviceID
+  deviceId <- getDefaultOutputDeviceI
   case deviceId of
      Nothing   -> putStrLn "Pas de port Midi par default"
      Just n ->
       do
-       result <- openOutput n 1
+       result <- openOutput 0 1
        case result of
         Left err   -> return ()
         Right stream ->
