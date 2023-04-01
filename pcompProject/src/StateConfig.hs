@@ -15,7 +15,6 @@ changeDevice newDevice = do
     put $ options {device = newDevice}
     return (newDevice)
 
-let (newVal, newOptions) = runState (changeDevice 1) (GameOptions 0)
 
 changeInstrument :: Int -> State GameConfig Int
 changeDevice newInstrument = do 
