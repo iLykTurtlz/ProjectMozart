@@ -4,7 +4,7 @@ import Control.Monad.State.Strict
 data GameConfig = GameConfig{
     instrument :: Int,
     mode :: Int,
-    mirroir :: Bool,
+    mirror :: Bool,
     f :: Float,
     device :: Int
 } deriving (Show)
@@ -28,11 +28,11 @@ changeMode newMode = do
     put $ options {mode = newMode}
     return (newMode)
 
-changeMirror :: Bool -> State GameConfig Bool
-changeMirror newMirroir = do
+changeMiror :: Bool -> State GameConfig Bool
+changeMiror newMirror = do
     options <- get
-    put $ options {mirroir = newMirroir}
-    return (newMirroir)
+    put $ options {mirror = newMirror}
+    return (newMirror)
 
 changeF :: Float -> State GameConfig Float
 changeF newF = do
