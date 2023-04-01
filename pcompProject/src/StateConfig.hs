@@ -1,5 +1,8 @@
 module StateConfig where
 
+import Lib
+import Control.Monad.State
+
 
 data GameConfig = GameConfig{
     instrument :: Int,
