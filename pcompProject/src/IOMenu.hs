@@ -16,11 +16,16 @@ menu config = do
   putStrLn " 0 : Quitter\n 1 : Jouer un Menuet\n 2 : Changer la configuration\n"
   c <- getChar
   case c of
-    '0' -> putStrLn "Au revoir"
-    '1' -> putStrLn "On joue"
-    '2' -> putStrLn "Autre Menu"
+    '0' -> putStrLn "\nAu revoir\n"
+    '1' -> do
+        putStrLn "\nOn joue\n"
+        menu config
+    '2' -> do
+        putStrLn "\nAutre Menu\n"
+        menu config
     _   -> do
-      putStrLn "Mauvaise commande"
+      putStrLn "\nMauvaise commande\n"
+      menu config
   terminate
   return()
 
