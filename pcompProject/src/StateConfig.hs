@@ -9,7 +9,7 @@ data GameConfig = GameConfig{
     mirroir :: Bool,
     f :: Float,
     device :: Int
-}
+} deriving (Show)
 
 changeDevice :: Int -> State GameConfig Int
 changeDevice newDevice = do
