@@ -18,18 +18,37 @@ validateIntegralInput = do
   input <- getLine
   case (readMaybe input::Maybe Int) of
     Just n -> return n
-    Nothing -> do
-      putStrLn "Il faut saisir un entier"
-      validateIntegralInput
+    Nothing -> putStrLn "Il faut saisir un entier" >> validateIntegralInput
 
 validateBoundedIntegralInput::Int->Int->IO Int
 validateBoundedIntegralInput borneInf borneSup = do
   input <- getLine
   case (readMaybe input::Maybe Int) of 
     Just n -> 
-      if (n < borneInf) || (n > borneSup) then do
-        putStrLn ("Il faut que la valeur soit entre "++(show borneInf)++" et "++(show borneSup))
-        validateBoundedIntegralInput borneInf borneSup
+      if (n < borneInf) || (n > borneSup) then
+        putStrLn ("Il faut que la valeur soit entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedIntegralInput borneInf borneSup
       else
         return n
     Nothing -> putStrLn ("Il faut saisir un entier entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedIntegralInput borneInf borneSup
+
+validateFloatInput::IO Float
+validateFloatInput = do
+  input <- getLine
+  case (readMaybe input::Maybe Float) of
+    Just n -> return n
+    Nothing -> do
+      putStrLn "Il faut saisir un Float"
+      validateFloatInput
+
+validateBoundedFloatInput::Float->Float->IO Float
+validateBoundedFloatInput borneInf borneSup = do
+  input <- getLine
+  case (readMaybe input::Maybe Float) of 
+    Just n -> 
+      if (n < borneInf) || (n > borneSup) then
+        putStrLn ("Il faut que la valeur soit entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedFloatInput borneInf borneSup
+      else
+        return n
+    Nothing -> putStrLn ("Il faut saisir un Float entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedFloatInput borneInf borneSup
+
+
