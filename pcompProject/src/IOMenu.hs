@@ -1,6 +1,7 @@
 module IOMenu where
 
 import Control.Concurrent
+import Control.Monad.State.Strict
 import Sound.PortMidi
 import Midi
 import StateConfig
@@ -41,11 +42,54 @@ menuConfig config = do
   c <- getChar
   case c of 
     '0' -> putStrLn "Au revoir"
-    '1' -> putStrLn "Instrument"
-    '2' -> putStrLn "Transposition"
-    '3' -> putStrLn "Miroir"
-    '4' -> putStrLn "Durée"
-    '5' -> putStrLn "Device"
+    '1' -> do
+        putStrLn "Changement d'instrument"
+        putStrLn "\n\t\tEntrez un nombre entre 1 et 5\n"
+        i <- getInt
+        (_,newConfig) <- runState (changeInstrument i) config
+        menuConfig newConfig
+    '2' -> do
+        putStrLn "\n\t\tTransposition"
+        putStrLn "\n\t\tEntrer un mode de transposition \n(0 : pas de transposition, 1: transposition de +12 demis tons, 2 : transpositon de -12 demis tons, 3 : transposition libre)\n"
+        t <- getChar
+        case t of
+            '0' -> "\n\t\t~Au revoir !"
+            '1' -> do
+                (_,newConfig)<- runState (changeMode 1) config
+                menuConfig newConfig
+            '2' -> do
+                (_,newConfig)<- runState (changeMode 2) config
+                menuConfig newConfig
+            '3' -> do
+                putStrLn "En travaux"
+                menuConfig config
+            _ -> do 
+                putStrLn "\n\t\tMauvaise Commande\n"
+                menuConfig config
+
+    '3' -> do
+        putStrLn "\n\t\tMode Miroir"
+        putStrLn "\n\t\ty/n ?"
+        m <- getChar
+        case m of 
+            'y'->do
+                (_,newConfig)<- runState (changeMirror True) config
+                menuConfig newConfig
+            'n'->do
+                (_,newConfig)<- runState (changeMirror False) config
+                menuConfig newConfig
+    '4' -> do
+        putStrLn "\n\t\tMultiplier la durée"
+        putStrLn "\n\t\tEntrez un nombre flottant pour multiplier la durée du menuet\n"
+        d <- getFloat
+        (_,newConfig)<- runState (changeF d) config
+        menuConfig newConfig
+    '5' -> do
+        putStrLn "\n\t\tChanger l'appareil de sortie"
+        putStrLn "\n\t\tEntrez le numéro de l'appareil de sortie souhaité\n"
+        device <- getInt
+        (_,newConfig)<- runState (changeDevice device) config
+        menuConfig newConfig
     _ -> do
       putStrLn "Mauvaise Commande"
   terminate
