@@ -1,8 +1,6 @@
 module StateConfig where
 
-import Control.Monad.State
-
-
+import Control.Monad.State.Strict
 data GameConfig = GameConfig{
     instrument :: Int,
     mode :: Int,
