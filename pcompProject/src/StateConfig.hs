@@ -2,10 +2,10 @@ module StateConfig where
 
 
 data GameConfig = GameConfig{
-    instrument :: Int
-    mode :: Int
-    mirroir :: Bool
-    f :: Float
+    instrument :: Int,
+    mode :: Int,
+    mirroir :: Bool,
+    f :: Float,
     device :: Int
 }
 

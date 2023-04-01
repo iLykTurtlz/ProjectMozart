@@ -15,9 +15,14 @@ menu config = do
     putStrLn "Le Jeu de Mozart\nQue voulez vous faire ?\n"
     putStrLn " 0 : Quitter\n 1 : Jouer un Menuet\n 2 : Changer la configuration\n"
     c <- getChar
-    if c == 1 then --Cas où on joue le menuet
+    case c of
+        "1" ->
+        "2" ->
+        _   ->
 
-    else if c == 2 then --Cas où on va dans le menu de changement de configuration
+    if c == "1" then --Cas où on joue le menuet
+
+    else if c == "2" then --Cas où on va dans le menu de changement de configuration
     
 
     else --Cas où on arrête (si pas dans ce cas, appel récursif à Menu)
@@ -34,6 +39,17 @@ menuConfig config = do
     --Traiter les différents cas en faisant appel aux fonctions de StateConfig
     --Si 1,2,3,4,5 en entrée, on fait un appel récursif à GameConfig avec la nouvelle 
     --configuration récupérée, sinon, on la retourne juste.
+    c <- getChar
+    case c of 
+        "1" ->
+        "2" ->
+        "3" ->
+        "4" ->
+        "5" ->
+        _ ->        -- Cas d'arrêt
+    
+
+
 
 
 
