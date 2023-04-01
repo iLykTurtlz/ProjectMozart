@@ -13,11 +13,11 @@ concatInput = do
     Just a -> putStrLn ("You entered "++(show a))
     Nothing -> putStrLn "Invalid number entered" >> concatInput 
 
-validateIntegralInput::Int
+validateIntegralInput::IO Int
 validateIntegralInput = do
   input <- getLine
   case (readMaybe input::Maybe Int) of
-    Just n -> n
+    Just n -> return n
     Nothing -> validateIntegralInput
 {-
 validateBoundedIntegralInput::Int->Int->Int
