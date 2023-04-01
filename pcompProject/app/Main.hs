@@ -4,6 +4,7 @@ import Control.Concurrent
 import Sound.PortMidi
 import Midi
 import MusicLib
+import System.Random
 
 midiDevicePrint :: Int -> IO ()
 midiDevicePrint 0 = do 
@@ -36,6 +37,9 @@ main = do
           return ()
   terminate
   return ()
+
+randomNumber :: (Int, Int) ->  IO Int
+randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
   
 
 testPlay::MusObj->IO ()
