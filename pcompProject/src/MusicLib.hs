@@ -1,5 +1,10 @@
 module MusicLib where
 
+import Sound.PortMidi
+import Control.Concurrent
+import Data.List
+
+
 --Ici les tests sont bons, les fonctions marchent.
 
 -- Music interface
@@ -35,10 +40,10 @@ stretch (Measure elems) val = (Measure (map (\x -> (stretch x val)) elems))
 
 --Retourne un nouvel objet musical dont les hauteurs ont été additionées de n demitons.
 --TEST OK
-transpose :: MusObj -> Integer -> MusObj
-transpose (Note pd d v) n = Note (pd + n) d v
-transpose (Chord onset elems) n = Chord onset (map (\x -> (transpose x n )) elems )
-transpose (Measure elems) n = Measure (map (\x -> (transpose x n ) ) elems  )
+transposer :: MusObj -> Integer -> MusObj
+transposer (Note pd d v) n = Note (pd + n) d v
+transposer (Chord onset elems) n = Chord onset (map (\x -> (transposer x n )) elems )
+transposer (Measure elems) n = Measure (map (\x -> (transposer x n ) ) elems  )
 
 --Fait le miroir des toutes les hauteurs d’un objet musical autour d’une hauteur donnée.
 --Le miroir d’une hauteur h autour d’une hauteur c est définie par c − (h − c).
@@ -58,10 +63,11 @@ collectMidiNote p d v at  =
      noteOff = PMMsg 0x90 (fromIntegral p) 0 in
  [(at, noteOn),(at + d, noteOff)]
 
+
 collectMidi :: MusObj -> Integer -> [(Integer, PMMsg)]
 collectMidi (Note p d v) at = collectMidiNote p d v at
---collectMidi (Chord onset elems) at = 
---collectMidi (Measure elems) at = 
+collectMidi (Chord onset elems) at = concat (map (\elem->collectMidi elem at)(elems))
+collectMidi (Measure elems) at = concat (map (\elem->collectMidi elem at)(elems))
 
 myPredicate :: Ord a => (a, b1) -> (a, b2) -> Ordering
 myPredicate (a1, a2) (b1, b2) = compare a1 b1
@@ -79,6 +85,8 @@ play obj stream = do
   writeEvents stream evts
   threadDelay (fromIntegral (dur*1000))
   return ()
+
+
 
 -------------------------
 --Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface
