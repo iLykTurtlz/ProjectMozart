@@ -19,7 +19,7 @@ changeDevice newDevice = do
 
 
 changeInstrument :: Int -> State GameConfig Int
-changeDevice newInstrument = do 
+changeInstrument newInstrument = do 
     options <- get
     put $ options {instrument = newInstrument}
     return (newInstrument)
