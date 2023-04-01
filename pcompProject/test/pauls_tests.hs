@@ -1,4 +1,8 @@
+module Main where
 
+import Control.Concurrent
+import Sound.PortMidi
+import Midi
 import Text.Read 
 
 test::IO ()
@@ -52,3 +56,16 @@ validateBoundedFloatInput borneInf borneSup = do
     Nothing -> putStrLn ("Il faut saisir un Float entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedFloatInput borneInf borneSup
 
 
+testPlay::MusObj->IO ()
+testPlay mObj = do
+  initialize
+  result <- openOutput 2 1
+  case result of
+    Left err -> return ()
+    Right stream ->
+      do
+        play mObj stream
+        close stream
+        return ()
+  terminate
+  return ()

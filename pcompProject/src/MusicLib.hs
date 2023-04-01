@@ -66,7 +66,7 @@ collectMidiNote p d v at  =
 
 collectMidi :: MusObj -> Integer -> [(Integer, PMMsg)]
 collectMidi (Note p d v) at = collectMidiNote p d v at
-collectMidi (Chord onset elems) at = concat (map (\elem->collectMidi elem at)(elems))
+collectMidi (Chord onset elems) at = concat (map (\elem->collectMidi elem onset)(elems))
 collectMidi (Measure elems) at = concat (map (\elem->collectMidi elem at)(elems))
 
 myPredicate :: Ord a => (a, b1) -> (a, b2) -> Ordering

@@ -3,6 +3,7 @@ module Main where
 import Control.Concurrent
 import Sound.PortMidi
 import Midi
+import MusicLib
 
 midiDevicePrint :: Int -> IO ()
 midiDevicePrint 0 = getDeviceInfo 0 >>= print
@@ -30,5 +31,20 @@ main = do
           threadDelay (2000 * 1000)
           close stream
           return ()
+  terminate
+  return ()
+  
+
+testPlay::MusObj->IO ()
+testPlay mObj = do
+  initialize
+  result <- openOutput 2 1
+  case result of
+    Left err -> return ()
+    Right stream ->
+      do
+        play mObj stream
+        close stream
+        return ()
   terminate
   return ()
