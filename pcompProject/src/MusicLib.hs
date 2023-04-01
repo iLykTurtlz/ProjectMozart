@@ -5,6 +5,7 @@ import Control.Concurrent
 import Data.List
 
 
+
 --Ici les tests sont bons, les fonctions marchent.
 
 -- Music interface
@@ -86,10 +87,35 @@ play obj stream = do
   threadDelay (fromIntegral (dur*1000))
   return ()
 
+--A MODIFIER !!!!!
+trouverMesure :: Int -> MusObj 
+trouverMesure = mesure_test
+
+performMeasure::GameConfig->PMStream->Int->IO ()
+performMeasure config stream 0 = return ()
+performMeasure config stream i =
+  let mesure = trouverMesure i in
+  do
+    let mesureMir = 
+      if config.mirror then (mirror mesure 6)
+      else mesure
+    in 
+      let mesureTranspose = 
+        case config.mode of
+          0 -> mesureMir
+          1 -> (transposer mesureMir 12)
+          2 -> (transposer mesureMir (-12))
+          _ -> mesureMir
+      in 
+        let mesureStretch = (stretch mesureTranspose (config.f))
+        in play mesureStretch stream
+    performMeasure config stream (i-1)
+   
+  
 
 
 -------------------------
---Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface
+--Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface\
 mesure_test :: MusObj
 mesure_test = Measure [
             (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)]),
@@ -102,3 +128,28 @@ note_test:: MusObj
 note_test = (Note 76 280 93)
 chord_test :: MusObj
 chord_test = (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)])
+
+
+
+
+testPlay::MusObj->IO ()
+testPlay mObj = do
+  initialize
+  result <- openOutput 2 1
+  case result of
+    Left err -> return ()
+    Right stream ->
+      do
+        play mObj stream
+        close stream
+        return ()
+  terminate
+  return ()
+
+testMenuet::[MusObj]->Int->IO ()
+testMenuet mlist 176 = return ()
+testMenuet mlist n = do
+  testPlay (mlist!!n)
+  testMenuet mlist (n+1)
+
+

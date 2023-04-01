@@ -15,6 +15,7 @@ midiDevicePrint n = do
   getDeviceInfo n >>= print
   midiDevicePrint (n - 1)
 
+
 main :: IO ()
 main = do
   putStrLn "Le Jeu de Mozart "
@@ -42,16 +43,3 @@ randomNumber :: (Int, Int) ->  IO Int
 randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
   
 
-testPlay::MusObj->IO ()
-testPlay mObj = do
-  initialize
-  result <- openOutput 2 1
-  case result of
-    Left err -> return ()
-    Right stream ->
-      do
-        play mObj stream
-        close stream
-        return ()
-  terminate
-  return ()
