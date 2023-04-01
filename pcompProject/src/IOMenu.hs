@@ -41,7 +41,9 @@ menuConfig config = do
   --configuration récupérée, sinon, on la retourne juste.
   c <- getChar
   case c of 
-    '0' -> putStrLn "Au revoir"
+    '0' -> do 
+        putStrLn "Au revoir"
+        return config
     '1' -> do
         putStrLn "Changement d'instrument"
         putStrLn "\n\t\tEntrez un nombre entre 1 et 5\n"
