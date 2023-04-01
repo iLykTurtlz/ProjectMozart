@@ -6,8 +6,11 @@ import Midi
 import MusicLib
 
 midiDevicePrint :: Int -> IO ()
-midiDevicePrint 0 = getDeviceInfo 0 >>= print
+midiDevicePrint 0 = do 
+  putStrLn "\nAppareil n°0"
+  getDeviceInfo 0 >>= print
 midiDevicePrint n = do
+  putStrLn ("\nAppareil n°" ++ (show n))
   getDeviceInfo n >>= print
   midiDevicePrint (n - 1)
 
@@ -16,7 +19,7 @@ main = do
   putStrLn "Le Jeu de Mozart "
   initialize
   n <- countDevices
-  midiDevicePrint (n - 1)
+  midiDevicePrint (n-1)
   deviceId <- getDefaultOutputDeviceID
   case deviceId of
      Nothing   -> putStrLn "Pas de port Midi par default"

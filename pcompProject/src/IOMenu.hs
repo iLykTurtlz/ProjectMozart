@@ -6,6 +6,7 @@ import Sound.PortMidi
 import Midi
 import StateConfig
 import Text.Read 
+import Main
 
 --À COMPLÉTER
 
@@ -100,6 +101,8 @@ menuConfig config = do
         putStrLn "\n\t\tChanger l'appareil de sortie"
        
         putStrLn "\n\t\tEntrez le numéro de l'appareil de sortie souhaité\n"
+        n <- countDevices
+        midiDevicePrint (n-1)
         device <- validateIntegralInput 
         let newConfig = execState (changeDevice device) config in
             menuConfig newConfig
