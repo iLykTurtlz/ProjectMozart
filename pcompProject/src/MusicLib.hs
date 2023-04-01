@@ -49,6 +49,38 @@ mirror (Chord onset elems)  h = Chord onset (map (\x -> mirror x h) elems)
 mirror (Measure elems)  h = Measure (map (\x -> mirror x h) elems)
 
 
+
+---------------- COLLECT MIDI --------
+
+collectMidiNote :: Integer->Integer->Integer->Integer->[(Integer,PMMsg)]
+collectMidiNote p d v at  =
+ let noteOn = PMMsg 0x90 (fromIntegral p) (fromIntegral v)
+     noteOff = PMMsg 0x90 (fromIntegral p) 0 in
+ [(at, noteOn),(at + d, noteOff)]
+
+collectMidi :: MusObj -> Integer -> [(Integer, PMMsg)]
+collectMidi (Note p d v) at = collectMidiNote p d v at
+--collectMidi (Chord onset elems) at = 
+--collectMidi (Measure elems) at = 
+
+myPredicate :: Ord a => (a, b1) -> (a, b2) -> Ordering
+myPredicate (a1, a2) (b1, b2) = compare a1 b1
+
+sortMidi ::  [(Integer,PMMsg)] -> [(Integer,PMMsg)]
+sortMidi = sortBy myPredicate
+
+play :: MusObj -> PMStream -> IO ()
+play obj stream = do
+  startTime <- time
+  let dur = getDur obj
+  let midiEvents = sortMidi (collectMidi obj 0)
+  let evts = map (\(t,msg) -> PMEvent {message = encodeMsg msg, 
+    timestamp = fromIntegral t + startTime}) midiEvents
+  writeEvents stream evts
+  threadDelay (fromIntegral (dur*1000))
+  return ()
+
+-------------------------
 --Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface
 mesure_test :: MusObj
 mesure_test = Measure [
