@@ -5,6 +5,7 @@ import Control.Monad.State.Strict
 import Sound.PortMidi
 import Midi
 import StateConfig
+import Text.Read 
 
 --À COMPLÉTER
 
@@ -109,3 +110,24 @@ menuConfig config = do
 --Le stream en paramètres, on verra globalement ça avec la 4.4
 
 
+
+validateIntegralInput::IO Int
+validateIntegralInput = do
+  input <- getLine
+  case (readMaybe input::Maybe Int) of
+    Just n -> return n
+    Nothing -> do
+      putStrLn "Il faut saisir un entier"
+      validateIntegralInput
+
+validateBoundedIntegralInput::Int->Int->IO Int
+validateBoundedIntegralInput borneInf borneSup = do
+  input <- getLine
+  case (readMaybe input::Maybe Int) of 
+    Just n -> 
+      if (n < borneInf) || (n > borneSup) then do
+        putStrLn ("Il faut que la valeur soit entre "++(show borneInf)++" et "++(show borneSup))
+        validateBoundedIntegralInput borneInf borneSup
+      else
+        return n
+    Nothing -> putStrLn ("Il faut saisir un entier entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedIntegralInput borneInf borneSup
