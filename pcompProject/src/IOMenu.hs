@@ -5,6 +5,7 @@ import Control.Monad.State.Strict
 import Sound.PortMidi
 import Midi
 import StateConfig
+import Text.Read 
 
 --À COMPLÉTER
 
@@ -62,4 +63,44 @@ menuConfig mconfig = do
 --Il faut voir où mettre l'ouverture de stream, si on la met avant de jouer le menuet, on peut alors passer simplement
 --Le stream en paramètres, on verra globalement ça avec la 4.4
 
+
+
+--Fonctions de validation
+validateIntegralInput::IO Int
+validateIntegralInput = do
+  input <- getLine
+  case (readMaybe input::Maybe Int) of
+    Just n -> return n
+    Nothing -> putStrLn "Il faut saisir un entier" >> validateIntegralInput
+
+validateBoundedIntegralInput::Int->Int->IO Int
+validateBoundedIntegralInput borneInf borneSup = do
+  input <- getLine
+  case (readMaybe input::Maybe Int) of 
+    Just n -> 
+      if (n < borneInf) || (n > borneSup) then
+        putStrLn ("Il faut que la valeur soit entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedIntegralInput borneInf borneSup
+      else
+        return n
+    Nothing -> putStrLn ("Il faut saisir un entier entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedIntegralInput borneInf borneSup
+
+validateFloatInput::IO Float
+validateFloatInput = do
+  input <- getLine
+  case (readMaybe input::Maybe Float) of
+    Just n -> return n
+    Nothing -> do
+      putStrLn "Il faut saisir un Float"
+      validateFloatInput
+
+validateBoundedFloatInput::Float->Float->IO Float
+validateBoundedFloatInput borneInf borneSup = do
+  input <- getLine
+  case (readMaybe input::Maybe Float) of 
+    Just n -> 
+      if (n < borneInf) || (n > borneSup) then
+        putStrLn ("Il faut que la valeur soit entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedFloatInput borneInf borneSup
+      else
+        return n
+    Nothing -> putStrLn ("Il faut saisir un Float entre "++(show borneInf)++" et "++(show borneSup)) >> validateBoundedFloatInput borneInf borneSup
 
