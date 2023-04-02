@@ -8,7 +8,7 @@ import System.Random
 
 --Fonction aléatoire
 randomNumber :: (Int, Int) ->  IO Int
-randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
+randomNumber (inf, sup) = (+inf) . (`mod` ((sup +1) - inf)) <$> randomIO
 
 
 --Fonctions utile pour savoir quelles valeurs de h sont raisonnables pour la fonction fmirror dans MusicLib

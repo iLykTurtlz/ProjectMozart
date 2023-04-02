@@ -87,8 +87,11 @@ menuConfig config = do
         m <- getChar
         case m of 
             'y'->do
-                let newConfig = execState (changeMirror True) config in
-                    menuConfig newConfig
+                putStrLn "\t\t\tÀ partir de quelle hauteur de note souhaitez vous faire ce miroir\n\t\t\t*Attenttion : si la hauteur est trop faible ou trop élevée, vous risque de ne pas entendre toutes les notes...\n\t\t\t*Rappel : 60 est la hauteur du \"do du milieu\" sur un piano :)"
+                h <- validateIntegralInput 
+                let newConfigH = execState (changeHMirror h) config in 
+                  let newConfig = execState (changeMirror True) newConfigH in
+                      menuConfig newConfig
           ---------
             'n'->do
                 let newConfig = execState (changeMirror False) config in
@@ -156,7 +159,7 @@ performMeasure::GameConfig->PMStream->Int->IO ()
 performMeasure config stream 0 = return ()
 performMeasure config stream i = do
   mesure <- chooseMeasure measures indices (17-i) 
-  let mesureMir = if (mirror config) then (fmirror mesure 59)      --ICI voir comment se fixe h
+  let mesureMir = if (mirror config) then (fmirror mesure (toInteger (hMirror config)))      
                   else mesure
     in 
       let mesureTranspose = case (mode config) of
