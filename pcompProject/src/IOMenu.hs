@@ -39,9 +39,6 @@ menuConfig :: GameConfig -> IO GameConfig
 menuConfig config = do
   putStrLn "\n\t~Quel changement de configuration apporter ?"
   putStrLn "\t0 : Aucun\n\t1 : Changer d'instrument\n\t2 : Mode de transposition\n\t3 : Mode mirroir ?\n\t4 : Multiplier la durée du menuet\n\t5 : Changer l'appareil de Sortie\n"
-  --Traiter les différents cas en faisant appel aux fonctions de StateConfig
-  --Si 1,2,3,4,5 en entrée, on fait un appel récursif à GameConfig avec la nouvelle 
-  --configuration récupérée, sinon, on la retourne juste.
   c <- getChar
   case c of 
     '0' -> do 
@@ -63,18 +60,22 @@ menuConfig config = do
             '0' -> do
                 let newConfig = execState (changeMode 0) config in
                     menuConfig newConfig
+          ---------
             '1' -> do
                 let newConfig = execState (changeMode 1) config in
                     menuConfig newConfig
+          ---------
             '2' -> do
                 let newConfig = execState (changeMode 2) config in
                     menuConfig newConfig
+          ---------
             '3' -> do
                 putStrLn "\n\t\t\t~De combien de demis tons transposer ?"
                 nb <- validateIntegralInput
                 let newConfigTons = execState (changeTranspoLibre nb) config in
                   let newConfig = execState (changeMode 3) newConfigTons in 
                     menuConfig newConfig
+          ---------
             _ -> do 
                 putStrLn "\n\t\t~Mauvaise Commande\n"
                 menuConfig config
@@ -87,9 +88,11 @@ menuConfig config = do
             'y'->do
                 let newConfig = execState (changeMirror True) config in
                     menuConfig newConfig
+          ---------
             'n'->do
                 let newConfig = execState (changeMirror False) config in
                     menuConfig newConfig
+          ---------
             _ -> do
               putStrLn "\n\t\t~Mauvaise Commande!\n"
               menuConfig config
@@ -116,8 +119,6 @@ menuConfig config = do
         menuConfig config
     
 
-
-
 --Fonction MidiDevicePrint
 midiDevicePrint :: Int -> IO ()
 midiDevicePrint 0 = do 
@@ -129,7 +130,8 @@ midiDevicePrint n = do
   midiDevicePrint (n - 1)
 
 
---Fonction jouerMenuet, avec la configuration en paramètres
+--Fonction jouerMenuet, avec la configuration en paramètres, ouvre le stream bon, 
+--met le bon instrument, appelle perform measure, puis ferme le stream.
 jouer::GameConfig->IO ()
 jouer config = do
   putStrLn (show config)      --À supprimer quand on aura fini
@@ -145,8 +147,6 @@ jouer config = do
         return ()
   terminate
   return ()
-
-
 
 
 

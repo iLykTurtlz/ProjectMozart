@@ -7,8 +7,6 @@ import Data.List
 
 
 
---Ici les tests sont bons, les fonctions marchent.
-
 -- Music interface
 data MusObj = Note  Integer Integer Integer | 
               Chord Integer [MusObj] | 
@@ -34,7 +32,6 @@ noteCount (Chord onset elems) = foldl (\x y-> x + y) 0 (map noteCount elems)
 noteCount (Measure elems) = foldl (\x y -> x + y) 0 (map noteCount elems)
 
 --Retourne un nouvel objet musical dont la durée a été multipliée par un facteur flottant.
---TEST OK
 stretch :: MusObj -> Float -> MusObj
 stretch (Note pd d v) val = (Note pd (d * (round val)) v)
 stretch (Chord onset elems) val = (Chord onset (map (\x -> (stretch x val)) elems))
@@ -49,7 +46,6 @@ transposer (Measure elems) n = Measure (map (\x -> (transposer x n ) ) elems  )
 
 --Fait le miroir des toutes les hauteurs d’un objet musical autour d’une hauteur donnée.
 --Le miroir d’une hauteur h autour d’une hauteur c est définie par c − (h − c).
---TEST OK
 fmirror :: MusObj -> Integer -> MusObj
 fmirror (Note pd d v)  h = (Note (pd - (h-pd)) d v)
 fmirror (Chord onset elems)  h = Chord onset (map (\x -> fmirror x h) elems)
@@ -77,6 +73,7 @@ myPredicate (a1, a2) (b1, b2) = compare a1 b1
 sortMidi ::  [(Integer,PMMsg)] -> [(Integer,PMMsg)]
 sortMidi = sortBy myPredicate
 
+--Fonction qui joue un objet musical
 play :: MusObj -> PMStream -> IO ()
 play obj stream = do
   startTime <- time
@@ -89,25 +86,19 @@ play obj stream = do
   return ()
 
 
-mesure_test :: MusObj
-mesure_test = Measure [
-            (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)]),
-            (Chord 292 [(Note 78 370 78)]),
-            (Chord 601 [(Note 76 300 91),(Note 43 585 83),(Note 55 588 98)]),
-            (Chord 910 [(Note 79 335 96)]),
-            (Chord 1189 [(Note 73 342 86),(Note 57 595 76),(Note 45 607 83)]),
-            (Chord 1509 [(Note 76 280 93)])]
-
 --A MODIFIER !!!!!
 trouverMesure :: Int -> MusObj 
 trouverMesure i = mesure_test
 
+
+--Fonction récursive qui joue les mesures du menuet selon les transformations demandées par la config
+--et sur le stream passé en paramètres
 performMeasure::GameConfig->PMStream->Int->IO ()
 performMeasure config stream 0 = return ()
 performMeasure config stream i =
   let mesure = trouverMesure i in
   do
-    let mesureMir = if (mirror config) then (fmirror mesure 6)
+    let mesureMir = if (mirror config) then (fmirror mesure 6)      --ICI voir comment se fixe h
                     else mesure
       in 
         let mesureTranspose = case (mode config) of
@@ -119,7 +110,7 @@ performMeasure config stream i =
           in 
             let mesureStretch = (stretch mesureTranspose (f config))
               in do 
-                putStrLn ("\nOn joue la mesure " ++ (show mesureStretch))
+                putStrLn ("\nOn joue la mesure " ++ (show mesureStretch))     --AFFICHAGE POUR TESTS 
                 play mesureStretch stream
     performMeasure config stream (i-1)
     
@@ -127,20 +118,18 @@ performMeasure config stream i =
 
 
 -------------------------
---Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface\
+--Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface
 
 note_test:: MusObj
 note_test = (Note 76 280 93)
 chord_test :: MusObj
 chord_test = (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)])
 
-
-
-{-
-testMenuet::[MusObj]->Int->IO ()
-testMenuet mlist 176 = return ()
-testMenuet mlist n = do
-  --testPlay (mlist!!n)
-  testMenuet mlist (n+1)
--}
-
+mesure_test :: MusObj
+mesure_test = Measure [
+            (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)]),
+            (Chord 292 [(Note 78 370 78)]),
+            (Chord 601 [(Note 76 300 91),(Note 43 585 83),(Note 55 588 98)]),
+            (Chord 910 [(Note 79 335 96)]),
+            (Chord 1189 [(Note 73 342 86),(Note 57 595 76),(Note 45 607 83)]),
+            (Chord 1509 [(Note 76 280 93)])]

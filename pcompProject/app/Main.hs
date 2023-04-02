@@ -8,7 +8,10 @@ import System.Random
 import IOMenu
 import StateConfig
 
-
+--Le main initialise pour obtenir le deviceID par défaut, puis appelle le menu avec une première configuration,
+--qui par défaut utilise l'instrument 1, ne transpose pas, ne fait pas le miroir, ne stretch pas et prend 
+--l'appareil de sortie par défaut s'il y en a un (sinon il essaie avec 0, s'il n'y en a aucun l'erreur n'est 
+--pas fatale pour le programme, un message s'affichera)
 main :: IO ()
 main = do
   putStrLn "Bienvenue dans le Jeu de Mozart "
