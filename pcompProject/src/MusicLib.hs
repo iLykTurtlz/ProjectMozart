@@ -1,5 +1,6 @@
 module MusicLib where
 
+import StateConfig
 import Sound.PortMidi
 import Control.Concurrent
 import Data.List
@@ -49,10 +50,10 @@ transposer (Measure elems) n = Measure (map (\x -> (transposer x n ) ) elems  )
 --Fait le miroir des toutes les hauteurs d’un objet musical autour d’une hauteur donnée.
 --Le miroir d’une hauteur h autour d’une hauteur c est définie par c − (h − c).
 --TEST OK
-mirror :: MusObj -> Integer -> MusObj
-mirror (Note pd d v)  h = (Note (pd - (h-pd)) d v)
-mirror (Chord onset elems)  h = Chord onset (map (\x -> mirror x h) elems)
-mirror (Measure elems)  h = Measure (map (\x -> mirror x h) elems)
+fmirror :: MusObj -> Integer -> MusObj
+fmirror (Note pd d v)  h = (Note (pd - (h-pd)) d v)
+fmirror (Chord onset elems)  h = Chord onset (map (\x -> fmirror x h) elems)
+fmirror (Measure elems)  h = Measure (map (\x -> fmirror x h) elems)
 
 
 
@@ -87,35 +88,7 @@ play obj stream = do
   threadDelay (fromIntegral (dur*1000))
   return ()
 
---A MODIFIER !!!!!
-trouverMesure :: Int -> MusObj 
-trouverMesure = mesure_test
 
-performMeasure::GameConfig->PMStream->Int->IO ()
-performMeasure config stream 0 = return ()
-performMeasure config stream i =
-  let mesure = trouverMesure i in
-  do
-    let mesureMir = 
-      if config.mirror then (mirror mesure 6)
-      else mesure
-    in 
-      let mesureTranspose = 
-        case config.mode of
-          0 -> mesureMir
-          1 -> (transposer mesureMir 12)
-          2 -> (transposer mesureMir (-12))
-          _ -> mesureMir
-      in 
-        let mesureStretch = (stretch mesureTranspose (config.f))
-        in play mesureStretch stream
-    performMeasure config stream (i-1)
-   
-  
-
-
--------------------------
---Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface\
 mesure_test :: MusObj
 mesure_test = Measure [
             (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)]),
@@ -124,6 +97,35 @@ mesure_test = Measure [
             (Chord 910 [(Note 79 335 96)]),
             (Chord 1189 [(Note 73 342 86),(Note 57 595 76),(Note 45 607 83)]),
             (Chord 1509 [(Note 76 280 93)])]
+
+--A MODIFIER !!!!!
+trouverMesure :: Int -> MusObj 
+trouverMesure i = mesure_test
+
+performMeasure::GameConfig->PMStream->Int->IO ()
+performMeasure config stream 0 = return ()
+performMeasure config stream i =
+  let mesure = trouverMesure i in
+  do
+    let mesureMir = if (mirror config) then (fmirror mesure 6)
+                    else mesure
+      in 
+        let mesureTranspose = case (mode config) of
+                                0 -> mesureMir
+                                1 -> (transposer mesureMir 12)
+                                2 -> (transposer mesureMir (-12))
+                                _ -> mesureMir
+          in 
+            let mesureStretch = (stretch mesureTranspose (f config))
+              in play mesureStretch stream
+    performMeasure config stream (i-1)
+    
+  
+
+
+-------------------------
+--Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface\
+
 note_test:: MusObj
 note_test = (Note 76 280 93)
 chord_test :: MusObj
@@ -131,25 +133,11 @@ chord_test = (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)])
 
 
 
-
-testPlay::MusObj->IO ()
-testPlay mObj = do
-  initialize
-  result <- openOutput 2 1
-  case result of
-    Left err -> return ()
-    Right stream ->
-      do
-        play mObj stream
-        close stream
-        return ()
-  terminate
-  return ()
-
+{-
 testMenuet::[MusObj]->Int->IO ()
 testMenuet mlist 176 = return ()
 testMenuet mlist n = do
-  testPlay (mlist!!n)
+  --testPlay (mlist!!n)
   testMenuet mlist (n+1)
-
+-}
 

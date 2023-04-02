@@ -5,6 +5,7 @@ import Control.Monad.State.Strict
 import Sound.PortMidi
 import Midi
 import StateConfig
+import MusicLib
 import Text.Read 
 import Main
 
@@ -22,6 +23,7 @@ menu config = do
     '0' -> putStrLn "\n~Au revoir\n"
     '1' -> do
         putStrLn "\nOn joue\n"
+        jouer config
         menu config
     '2' -> do
         newConfig <- menuConfig config
@@ -117,7 +119,23 @@ menuConfig config = do
 
 
 --Fonction jouerMenuet, avec la configuration en paramètres
---jouerMenuet :: GameConfig -> IO()
+--jouer :: GameConfig -> IO()
+jouer::GameConfig->IO ()
+jouer config = do
+  putStrLn (show config)
+  initialize
+  result <- openOutput (device config) 1
+  case result of
+    Left err -> return ()
+    Right stream ->
+      do
+        (changeInstrument (toInteger (instrument config)) stream)
+        performMeasure config stream 2
+        close stream
+        return ()
+  terminate
+  return ()
+
 
 --Il faut voir où mettre l'ouverture de stream, si on la met avant de jouer le menuet, on peut alors passer simplement
 --Le stream en paramètres, on verra globalement ça avec la 4.4

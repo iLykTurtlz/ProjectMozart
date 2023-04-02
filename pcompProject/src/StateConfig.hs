@@ -28,8 +28,8 @@ changeMode newMode = do
     put $ options {mode = newMode}
     return (newMode)
 
-changeMiror :: Bool -> State GameConfig Bool
-changeMiror newMirror = do
+changeMirror :: Bool -> State GameConfig Bool
+changeMirror newMirror = do
     options <- get
     put $ options {mirror = newMirror}
     return (newMirror)
