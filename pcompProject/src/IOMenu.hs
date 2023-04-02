@@ -7,7 +7,6 @@ import Midi
 import StateConfig
 import MusicLib
 import Text.Read 
-import Main
 
 --À COMPLÉTER
 
@@ -16,20 +15,20 @@ import Main
 --On a besoin d'une configuration pour lancer un menu, au premier appel, ce sera la configuration de base.
 menu :: GameConfig -> IO()          
 menu config = do
-  putStrLn "Bienvenue dans ~Le Jeu de Mozart~\nQue voulez vous faire ?\n"
+  putStrLn "\n~Que voulez vous faire ?\n"
   putStrLn " 0 : Quitter\n 1 : Jouer un Menuet\n 2 : Changer la configuration\n"
   c <- getChar
   case c of
     '0' -> putStrLn "\n~Au revoir\n"
     '1' -> do
-        putStrLn "\nOn joue\n"
+        putStrLn "\n~On joue le menuet\n"
         jouer config
         menu config
     '2' -> do
         newConfig <- menuConfig config
         menu newConfig
     _   -> do
-      putStrLn "\nMauvaise commande\n"
+      putStrLn "\n~Mauvaise commande !\n"
       menu config
   terminate
   return()
@@ -38,8 +37,8 @@ menu config = do
 --fonction qui affiche les choix et fait les changements de configuration correspondant, et retourne la nouvelle configuration
 menuConfig :: GameConfig -> IO GameConfig
 menuConfig config = do
-  putStrLn "\tQuel changement de configuration apporter ?\n"
-  putStrLn "\t 0 : Aucun\n\t 1 : Changer d'instrument\n\t 2 : Mode de transposition\n\t 3 : Mode mirroir ?\n\t 4 : Multiplier la durée du menuet\n\t 5 : Changer l'appareil de Sortie\n\n"
+  putStrLn "\n\t~Quel changement de configuration apporter ?"
+  putStrLn "\t0 : Aucun\n\t1 : Changer d'instrument\n\t2 : Mode de transposition\n\t3 : Mode mirroir ?\n\t4 : Multiplier la durée du menuet\n\t5 : Changer l'appareil de Sortie\n"
   --Traiter les différents cas en faisant appel aux fonctions de StateConfig
   --Si 1,2,3,4,5 en entrée, on fait un appel récursif à GameConfig avec la nouvelle 
   --configuration récupérée, sinon, on la retourne juste.
@@ -47,21 +46,18 @@ menuConfig config = do
   case c of 
     '0' -> do 
         putStrLn "\n\t~À plus !\n"
-        putStrLn "\nConfig à la fin de menuConfig\n"
-        putStrLn (show config)
-        putStrLn "\n"
         return config
     --------
     '1' -> do
-        putStrLn "\n\t\tChangement d'instrument"
-        putStrLn "\n\t\tEntrez un nombre entre 1 et 5\n"
+        putStrLn "\n\t\t~Changement d'instrument"
+        putStrLn "\t\t~Entrez un nombre entre 1 et 5"
         i <- (validateBoundedIntegralInput 1 5)
         let newConfig = execState (changeInstr i) config in 
             menuConfig newConfig
     ---------
     '2' -> do
-        putStrLn "\n\t\tTransposition"
-        putStrLn "\n\t\tEntrer un mode de transposition \n(0 : pas de transposition, 1: transposition de +12 demis tons, 2 : transpositon de -12 demis tons, 3 : transposition libre)\n"
+        putStrLn "\n\t\t~Transposition"
+        putStrLn "\t\t\t0 : pas de transposition\n\t\t\t1 : transposition de +12 demis tons\n\t\t\t2 : transpositon de -12 demis tons\n\t\t\t3 : transposition libre)"
         t <- getChar
         case t of
             '0' -> do
@@ -74,15 +70,18 @@ menuConfig config = do
                 let newConfig = execState (changeMode 2) config in
                     menuConfig newConfig
             '3' -> do
-                putStrLn "En travaux"
-                menuConfig config
+                putStrLn "\n\t\t\t~De combien de demis tons transposer ?"
+                nb <- validateIntegralInput
+                let newConfigTons = execState (changeTranspoLibre nb) config in
+                  let newConfig = execState (changeMode 3) newConfigTons in 
+                    menuConfig newConfig
             _ -> do 
-                putStrLn "\n\t\tMauvaise Commande\n"
+                putStrLn "\n\t\t~Mauvaise Commande\n"
                 menuConfig config
     ---------
     '3' -> do
-        putStrLn "\n\t\tMode Miroir"
-        putStrLn "\n\t\ty/n ?"
+        putStrLn "\n\t\t~Mode Miroir"
+        putStrLn "\t\ty/n ?"
         m <- getChar
         case m of 
             'y'->do
@@ -91,42 +90,53 @@ menuConfig config = do
             'n'->do
                 let newConfig = execState (changeMirror False) config in
                     menuConfig newConfig
+            _ -> do
+              putStrLn "\n\t\t~Mauvaise Commande!\n"
+              menuConfig config
     ---------
     '4' -> do
-        putStrLn "\n\t\tMultiplier la durée"
-        putStrLn "\n\t\tEntrez un nombre flottant pour multiplier la durée du menuet\n"
+        putStrLn "\n\t\t~Multiplier la durée"
+        putStrLn "\t\tEntrez un nombre flottant positif pour multiplier la durée du menuet"
         d <- validateBoundedFloatInput 0
         let newConfig = execState (changeF d) config in
             menuConfig newConfig
     ---------
     '5' -> do
-        putStrLn "\n\t\tChanger l'appareil de sortie"
-       
-        putStrLn "\n\t\tEntrez le numéro de l'appareil de sortie souhaité\n"
+        putStrLn "\n\t\t~Changer l'appareil de sortie"
+        putStrLn "\t\t~Entrez le numéro de l'appareil de sortie souhaité parmi ceux disponibles :\n"
         n <- countDevices
         midiDevicePrint (n-1)
-        device <- validateIntegralInput 
+        putStrLn "\n"
+        device <- validateBoundedIntegralInput (0) (n-1) 
         let newConfig = execState (changeDevice device) config in
             menuConfig newConfig
     ---------
     _ -> do 
-        putStrLn "Mauvaise Commande!\n"
+        putStrLn "\n\t\t~Mauvaise Commande!\n"
         menuConfig config
     
 
 
 
+--Fonction MidiDevicePrint
+midiDevicePrint :: Int -> IO ()
+midiDevicePrint 0 = do 
+  putStrLn "\nAppareil n°0"
+  getDeviceInfo 0 >>= print
+midiDevicePrint n = do
+  putStrLn ("\nAppareil n°" ++ (show n))
+  getDeviceInfo n >>= print
+  midiDevicePrint (n - 1)
 
 
 --Fonction jouerMenuet, avec la configuration en paramètres
---jouer :: GameConfig -> IO()
 jouer::GameConfig->IO ()
 jouer config = do
-  putStrLn (show config)
+  putStrLn (show config)      --À supprimer quand on aura fini
   initialize
   result <- openOutput (device config) 1
   case result of
-    Left err -> return ()
+    Left err -> putStrLn "Erreur d'ouverture du stream"
     Right stream ->
       do
         (changeInstrument (toInteger (instrument config)) stream)
@@ -137,12 +147,10 @@ jouer config = do
   return ()
 
 
---Il faut voir où mettre l'ouverture de stream, si on la met avant de jouer le menuet, on peut alors passer simplement
---Le stream en paramètres, on verra globalement ça avec la 4.4
 
 
 
---Fonctions de validation
+--Fonctions de saisie d'informations depuis le terminal
 validateIntegralInput::IO Int
 validateIntegralInput = do
   input <- getLine
@@ -175,9 +183,9 @@ validateBoundedFloatInput borneInf = do
   input <- getLine
   case (readMaybe input::Maybe Float) of 
     Just n -> 
-      if (n < borneInf)  then
-        putStrLn ("Il faut que la valeur supérieure à " ++ (show borneInf)) >> validateBoundedFloatInput borneInf
+      if (n <= borneInf)  then
+        putStrLn ("Il faut que la valeur soit supérieure à " ++ (show borneInf)) >> validateBoundedFloatInput borneInf
       else
         return n
-    Nothing -> putStrLn ("Il faut que la valeur supérieure à " ++ (show borneInf))  >> validateBoundedFloatInput borneInf
+    Nothing -> putStrLn ("Il faut que la valeur soit un flottant supérieur à " ++ (show borneInf))  >> validateBoundedFloatInput borneInf
 
