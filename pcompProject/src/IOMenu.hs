@@ -137,7 +137,6 @@ midiDevicePrint n = do
 --met le bon instrument, appelle perform measure, puis ferme le stream.
 jouer::GameConfig->IO ()
 jouer config = do
-  putStrLn (show config)      --À supprimer quand on aura fini
   initialize
   result <- openOutput (device config) 1
   case result of
