@@ -114,10 +114,13 @@ performMeasure config stream i =
                                 0 -> mesureMir
                                 1 -> (transposer mesureMir 12)
                                 2 -> (transposer mesureMir (-12))
+                                3 -> (transposer mesureMir (toInteger(transpoLibre config)))
                                 _ -> mesureMir
           in 
             let mesureStretch = (stretch mesureTranspose (f config))
-              in play mesureStretch stream
+              in do 
+                putStrLn ("\nOn joue la mesure " ++ (show mesureStretch))
+                play mesureStretch stream
     performMeasure config stream (i-1)
     
   

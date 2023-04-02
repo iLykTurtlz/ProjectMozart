@@ -6,7 +6,8 @@ data GameConfig = GameConfig{
     mode :: Int,
     mirror :: Bool,
     f :: Float,
-    device :: Int
+    device :: Int,
+    transpoLibre :: Int
 } deriving (Show)
 
 changeDevice :: Int -> State GameConfig Int
@@ -27,6 +28,12 @@ changeMode newMode = do
     options <- get
     put $ options {mode = newMode}
     return (newMode)
+
+changeTranspoLibre :: Int -> State GameConfig Int
+changeTranspoLibre newTranspoLibre = do
+    options <- get
+    put $ options {transpoLibre = newTranspoLibre}
+    return (newTranspoLibre)
 
 changeMirror :: Bool -> State GameConfig Bool
 changeMirror newMirror = do
