@@ -7,6 +7,7 @@ import Midi
 import StateConfig
 import MusicLib
 import Text.Read 
+import DataBase
 
 --À COMPLÉTER
 
@@ -148,6 +149,30 @@ jouer config = do
   terminate
   return ()
 
+
+--Fonction récursive qui joue les mesures du menuet selon les transformations demandées par la config
+--et sur le stream passé en paramètres
+performMeasure::GameConfig->PMStream->Int->IO ()
+performMeasure config stream 0 = return ()
+performMeasure config stream i =
+  let mesure = chooseMeasure measures i in
+  do
+    let mesureMir = if (mirror config) then (fmirror mesure 6)      --ICI voir comment se fixe h
+                    else mesure
+      in 
+        let mesureTranspose = case (mode config) of
+                                0 -> mesureMir
+                                1 -> (transposer mesureMir 12)
+                                2 -> (transposer mesureMir (-12))
+                                3 -> (transposer mesureMir (toInteger(transpoLibre config)))
+                                _ -> mesureMir
+          in 
+            let mesureStretch = (stretch mesureTranspose (f config))
+              in do 
+                putStrLn ("\nOn joue la mesure " ++ (show mesureStretch))     --AFFICHAGE POUR TESTS 
+                play mesureStretch stream
+    performMeasure config stream (i-1)
+    
 
 
 --Fonctions de saisie d'informations depuis le terminal
