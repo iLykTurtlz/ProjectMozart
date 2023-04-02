@@ -54,7 +54,7 @@ menuConfig config = do
     ---------
     '2' -> do
         putStrLn "\n\t\t~Transposition"
-        putStrLn "\t\t\t0 : pas de transposition\n\t\t\t1 : transposition de +12 demi-tons\n\t\t\t2 : transpositon de -12 demi-tons\n\t\t\t3 : transposition libre)"
+        putStrLn "\t\t\t0 : pas de transposition\n\t\t\t1 : transposition de +12 demi-tons\n\t\t\t2 : transpositon de -12 demi-tons\n\t\t\t3 : transposition libre"
         t <- getChar
         case t of
             '0' -> do
