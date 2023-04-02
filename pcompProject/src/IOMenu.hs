@@ -159,7 +159,7 @@ performMeasure::GameConfig->PMStream->Int->IO ()
 performMeasure config stream 0 = return ()
 performMeasure config stream i = do
   mesure <- chooseMeasure measures indices (17-i) 
-  let mesureMir = if (mirror config) then (fmirror mesure (hMirror config))      
+  let mesureMir = if (mirror config) then (fmirror mesure (toInteger (hMirror config)))      
                   else mesure
     in 
       let mesureTranspose = case (mode config) of
