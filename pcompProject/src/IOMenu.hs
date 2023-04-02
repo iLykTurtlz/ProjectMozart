@@ -170,6 +170,7 @@ performMeasure config stream i = do
         in 
           let mesureStretch = (stretch mesureTranspose (f config))
             in do 
+              putStrLn (show mesureStretch)
               play mesureStretch stream
   performMeasure config stream (i-1)
     

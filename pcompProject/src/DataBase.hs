@@ -14,6 +14,7 @@ randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
 chooseMeasure :: [MusObj] -> [[Int]] -> Int -> IO MusObj
 chooseMeasure database indices measureNumber = do
   alea <- randomNumber (2,12)
+  putStrLn "\n__________________________________________________________________________________________________________________"
   putStrLn ("\nSum of dice : "++(show alea))
   
   putStrLn ("Measure number "++(show measureNumber))
