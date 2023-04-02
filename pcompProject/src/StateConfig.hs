@@ -9,7 +9,8 @@ data GameConfig = GameConfig{
     mirror :: Bool,
     f :: Float,
     device :: Int,
-    transpoLibre :: Int
+    transpoLibre :: Int,
+    hMirror :: Int
 } deriving (Show)
 
 
@@ -44,6 +45,12 @@ changeMirror newMirror = do
     options <- get
     put $ options {mirror = newMirror}
     return (newMirror)
+
+changeHMirror :: Int -> State GameConfig Int
+changeHMirror newH = do
+    options <- get
+    put $ options {hMirror = newH}
+    return (newH)
 
 changeF :: Float -> State GameConfig Float
 changeF newF = do
