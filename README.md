@@ -50,4 +50,11 @@ Il contient le code des fonctionnalités sur lesquelles repose le main :
 
 # Choix par rapport au sujet
 
+## Étendre les options de transposition
 Nous avons choisi d'étendre le sujet en permettant une transposition plus libre grâce à un champ supplémentaire dans `GameConfig` qui contient le nombre de demis tons de la transposition libre, parce qu'il nous semblait utile de permettre des changements de tonalité.
+
+## Miroir
+Pour la fonctionnalité miroir, nous avons dû renommer la fonction qui applique les transformations `fmirror` pour la distinguer du champ `mirror` de notre `GameConfig`. Pour pouvoir au mieu l'utiliser, nous avons choisi de demander à l'utilisateur la valeur de h souhaitée, et il a donc fallu ajouter le champ `hMirror` à `GameConfig` (et toutes les fonctions qui vont avec, sur le même modèle que pour la transposition).
+
+## Affichage
+Nous avons choisi de laisser, lorsqu'on joue un Menuet, l'affichage de la valeur tirée au sort, du numéro de la mesure jouée, et de l'indice de la mesure dans la liste, afin de faciliter la vérification.

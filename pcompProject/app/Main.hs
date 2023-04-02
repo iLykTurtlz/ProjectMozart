@@ -11,7 +11,7 @@ import StateConfig
 
 main :: IO ()
 main = do
-  putStrLn "Bienvenue dans le Jeu de Mozart "
+  putStrLn "~Bienvenue dans le Jeu de Mozart"
   initialize
   deviceId <- getDefaultOutputDeviceID
   case deviceId of

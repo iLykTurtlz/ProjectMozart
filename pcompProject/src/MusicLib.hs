@@ -6,9 +6,6 @@ import Control.Concurrent
 import Data.List
 import System.Random
 
-
-
-
 -- Music interface
 data MusObj = Note  Integer Integer Integer | 
               Chord Integer [MusObj] | 
@@ -27,7 +24,6 @@ getDur (Chord onset elems) = foldl max 0 (map getDur elems)
 getDur (Measure elems) = foldl max 0 (map (\x -> (getDur x) + (getOnset x)) elems)
 
 --Retourne le nombre de notes d’un objet musical. 
---TEST OK
 noteCount :: MusObj -> Integer
 noteCount (Note pd d v) = 1
 noteCount (Chord onset elems) = foldl (\x y-> x + y) 0 (map noteCount elems)
@@ -40,7 +36,6 @@ stretch (Chord onset elems) val = ((Chord (round((fromIntegral onset::Float) * v
 stretch (Measure elems) val = (Measure (map (\x -> (stretch x val)) elems))
 
 --Retourne un nouvel objet musical dont les hauteurs ont été additionées de n demitons.
---TEST OK
 transposer :: MusObj -> Integer -> MusObj
 transposer (Note pd d v) n = Note (pd + n) d v
 transposer (Chord onset elems) n = Chord onset (map (\x -> (transposer x n )) elems )
@@ -49,7 +44,6 @@ transposer (Measure elems) n = Measure (map (\x -> (transposer x n ) ) elems  )
 --Fait le miroir des toutes les hauteurs d’un objet musical autour d’une hauteur donnée.
 --Le miroir d’une hauteur h autour d’une hauteur c est définie par c − (h − c).
 fmirror :: MusObj -> Integer -> MusObj
---fmirror (Note pd d v)  h = (Note (pd - (h-pd)) d v)
 fmirror (Note pd d v) h = (Note (pd - (h-pd)) d v)
 fmirror (Chord onset elems)  h = Chord onset (map (\x -> fmirror x h) elems)
 fmirror (Measure elems)  h = Measure (map (\x -> fmirror x h) elems)
@@ -90,11 +84,6 @@ play obj stream = do
 
 
 
-
-
-  
-
-
 -------------------------
 --Valeurs nous permettant de tester les fonctions précédentes avec stack ghci directement depuis l'interface
 
@@ -104,30 +93,6 @@ chord_test :: MusObj
 chord_test = (Chord 0 [(Note 42 610 86),(Note 54 594 81),(Note 81 315 96)])
 
 
-
-{-
-testMenuet::[MusObj]->Int->IO ()
-testMenuet mlist 176 = return ()
-testMenuet mlist n = do
-  --testPlay (mlist!!n)
-  testMenuet mlist (n+1)
--}
-
-{-}
-randomNumber :: (Int, Int) ->  IO Int
-randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
-  
-
-chooseMeasure::[MusObj]->Int->MusObj
-chooseMeasure database measureNumber = do
-  --measureNumber dans [1,16]
-  --dans les "let..in" on transforme les variables ludiques en variables informatiques
-  alea <- randomNumber (2,12)
-  let row = if measureNumber > 8 then alea-2+11 else alea-2 in
-    let column = (measureNumber-1) `mod` 8 in
-      let index = row * 8 + column in
-        database!!index
--}
 
 mesure_test :: MusObj
 mesure_test = Measure [
