@@ -49,7 +49,8 @@ transposer (Measure elems) n = Measure (map (\x -> (transposer x n ) ) elems  )
 --Fait le miroir des toutes les hauteurs d’un objet musical autour d’une hauteur donnée.
 --Le miroir d’une hauteur h autour d’une hauteur c est définie par c − (h − c).
 fmirror :: MusObj -> Integer -> MusObj
-fmirror (Note pd d v)  h = (Note (pd - (h-pd)) d v)
+--fmirror (Note pd d v)  h = (Note (pd - (h-pd)) d v)
+fmirror (Note pd d v) h = (Note (pd - (h-pd)) d v)
 fmirror (Chord onset elems)  h = Chord onset (map (\x -> fmirror x h) elems)
 fmirror (Measure elems)  h = Measure (map (\x -> fmirror x h) elems)
 
