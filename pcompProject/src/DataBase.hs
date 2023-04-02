@@ -11,7 +11,7 @@ randomNumber :: (Int, Int) ->  IO Int
 randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
 
 
-
+{-}
 --Fonction qui choisit les mesures
 chooseMeasure::[MusObj]->Int -> MusObj
 chooseMeasure database measureNumber = do
@@ -22,6 +22,15 @@ chooseMeasure database measureNumber = do
     let column = (measureNumber-1) `mod` 8 in
       let index = row * 8 + column in
         database!!index
+-}
+
+chooseMeasure :: [MusObj] -> Int -> IO MusObj
+chooseMeasure database measureNumber = do
+  alea <- randomNumber (2,12)
+  let row = if measureNumber > 8 then alea-2+11 else alea-2
+      column = (measureNumber-1) `mod` 8
+      index = row * 8 + column
+   in return $ database !! index
 
 
 --MIDI
