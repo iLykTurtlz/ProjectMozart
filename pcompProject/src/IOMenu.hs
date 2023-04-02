@@ -55,7 +55,7 @@ menuConfig config = do
     ---------
     '2' -> do
         putStrLn "\n\t\t~Transposition"
-        putStrLn "\t\t\t0 : pas de transposition\n\t\t\t1 : transposition de +12 demis tons\n\t\t\t2 : transpositon de -12 demis tons\n\t\t\t3 : transposition libre)"
+        putStrLn "\t\t\t0 : pas de transposition\n\t\t\t1 : transposition de +12 demi-tons\n\t\t\t2 : transpositon de -12 demi-tons\n\t\t\t3 : transposition libre)"
         t <- getChar
         case t of
             '0' -> do
@@ -71,18 +71,18 @@ menuConfig config = do
                     menuConfig newConfig
           ---------
             '3' -> do
-                putStrLn "\n\t\t\t~De combien de demis tons transposer ?"
+                putStrLn "\n\t\t\t~De combien de demi-tons transposer ?"
                 nb <- validateIntegralInput
                 let newConfigTons = execState (changeTranspoLibre nb) config in
                   let newConfig = execState (changeMode 3) newConfigTons in 
                     menuConfig newConfig
           ---------
             _ -> do 
-                putStrLn "\n\t\t~Mauvaise Commande\n"
+                putStrLn "\n\t\t~Mauvaise commande\n"
                 menuConfig config
     ---------
     '3' -> do
-        putStrLn "\n\t\t~Mode Miroir"
+        putStrLn "\n\t\t~Mode miroir"
         putStrLn "\t\ty/n ?"
         m <- getChar
         case m of 
@@ -95,7 +95,7 @@ menuConfig config = do
                     menuConfig newConfig
           ---------
             _ -> do
-              putStrLn "\n\t\t~Mauvaise Commande!\n"
+              putStrLn "\n\t\t~Mauvaise commande!\n"
               menuConfig config
     ---------
     '4' -> do
@@ -116,7 +116,7 @@ menuConfig config = do
             menuConfig newConfig
     ---------
     _ -> do 
-        putStrLn "\n\t\t~Mauvaise Commande!\n"
+        putStrLn "\n\t\t~Mauvaise commande!\n"
         menuConfig config
     
 

@@ -11,6 +11,20 @@ randomNumber :: (Int, Int) ->  IO Int
 randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
 
 
+--Fonctions utile pour savoir quelles valeurs de h sont raisonnables pour la fonction fmirror dans MusicLib
+estPlusAigue :: MusObj -> MusObj -> Bool
+
+
+estPlusGrave :: MusObj -> MusObj -> Bool
+
+
+getMinMaxHauteur :: [MusObj] -> (Int, Int)
+getMinMaxHauteur [] == (60,60)            --je sais déjà que do au milieu n'est ni la plus grave ni la plus aigue
+getMinMaxHauteur o:os = 
+  case 
+
+
+
 {-}
 --Fonction qui choisit les mesures
 chooseMeasure::[MusObj]->Int -> MusObj
