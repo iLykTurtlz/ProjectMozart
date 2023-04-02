@@ -1,6 +1,8 @@
 module StateConfig where
-
 import Control.Monad.State.Strict
+
+--Structure qui contient toutes les informations nécessaires pour configurer la manière dont
+--sera joué le menuet.
 data GameConfig = GameConfig{
     instrument :: Int,
     mode :: Int,
@@ -10,12 +12,14 @@ data GameConfig = GameConfig{
     transpoLibre :: Int
 } deriving (Show)
 
+
+--Fonctions qui permettent de changer les différentes informations des GameConfig grâce à la monade State
+
 changeDevice :: Int -> State GameConfig Int
 changeDevice newDevice = do
     options <- get
     put $ options {device = newDevice}
     return (newDevice)
-
 
 changeInstr :: Int -> State GameConfig Int
 changeInstr newInstrument = do 
