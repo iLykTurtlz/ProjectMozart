@@ -27,9 +27,18 @@ chooseMeasure database measureNumber = do
 chooseMeasure :: [MusObj] -> [[Int]] -> Int -> IO MusObj
 chooseMeasure database indices measureNumber = do
   alea <- randomNumber (2,12)
+  putStrLn ("alea : "++(show alea))
+  
+  putStrLn ("Measure number "++(show measureNumber))
+  if measureNumber > 8 then 
+    putStrLn ("Index "++(show ((indices !! 11) !! ((measureNumber-1) `mod` 8))))
+  else
+    putStrLn ("Index "++(show ((indices !! 0) !! ((measureNumber-1) `mod` 8))))
+  
   let row = if measureNumber > 8 then alea-2+11 else alea-2
       column = (measureNumber-1) `mod` 8
-    in return $ database !! (   (indices !! row) !! column   )
+    in 
+      return $ database !! (   ( (indices !! row) !! column ) - 1   )
 
 
 --MIDI

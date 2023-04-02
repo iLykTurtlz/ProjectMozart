@@ -155,8 +155,8 @@ jouer config = do
 performMeasure::GameConfig->PMStream->Int->IO ()
 performMeasure config stream 0 = return ()
 performMeasure config stream i = do
-  mesure <- chooseMeasure measures indices i 
-  let mesureMir = if (mirror config) then (fmirror mesure 6)      --ICI voir comment se fixe h
+  mesure <- chooseMeasure measures indices (17-i) 
+  let mesureMir = if (mirror config) then (fmirror mesure 59)      --ICI voir comment se fixe h
                   else mesure
     in 
       let mesureTranspose = case (mode config) of
