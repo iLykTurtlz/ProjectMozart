@@ -8,20 +8,8 @@ import System.Random
 
 --Fonction aléatoire
 randomNumber :: (Int, Int) ->  IO Int
-randomNumber (inf, sup) = (+inf) . (`mod` ((sup +1) - inf)) <$> randomIO
+randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
 
-
---Fonctions utile pour savoir quelles valeurs de h sont raisonnables pour la fonction fmirror dans MusicLib
-estPlusAigue :: MusObj -> MusObj -> Bool
-
-
-estPlusGrave :: MusObj -> MusObj -> Bool
-
-
-getMinMaxHauteur :: [MusObj] -> (Int, Int)
-getMinMaxHauteur [] == (60,60)            --je sais déjà que do au milieu n'est ni la plus grave ni la plus aigue
-getMinMaxHauteur o:os = 
-  case 
 
 
 
@@ -41,17 +29,18 @@ chooseMeasure database measureNumber = do
 chooseMeasure :: [MusObj] -> [[Int]] -> Int -> IO MusObj
 chooseMeasure database indices measureNumber = do
   alea <- randomNumber (2,12)
-  putStrLn ("alea : "++(show alea))
+  putStrLn ("\nSum of dice : "++(show alea))
   
   putStrLn ("Measure number "++(show measureNumber))
   if measureNumber > 8 then 
-    putStrLn ("Index "++(show ((indices !! 11) !! ((measureNumber-1) `mod` 8))))
+    putStrLn ("Index "++(show (  ((indices !! (alea-2+11)) !! ((measureNumber-1) `mod` 8)) -1 )))
   else
-    putStrLn ("Index "++(show ((indices !! 0) !! ((measureNumber-1) `mod` 8))))
+    putStrLn ("Index "++(show ((indices !! (alea-2)) !! ((measureNumber-1) `mod` 8))))
   
   let row = if measureNumber > 8 then alea-2+11 else alea-2
       column = (measureNumber-1) `mod` 8
-    in 
+    in
+      
       return $ database !! (   ( (indices !! row) !! column ) - 1   )
 
 

@@ -39,7 +39,7 @@ menu config = do
 menuConfig :: GameConfig -> IO GameConfig
 menuConfig config = do
   putStrLn "\n\t~Quel changement de configuration apporter ?"
-  putStrLn "\t0 : Aucun\n\t1 : Changer d'instrument\n\t2 : Mode de transposition\n\t3 : Mode mirroir ?\n\t4 : Multiplier la durée du menuet\n\t5 : Changer l'appareil de Sortie\n"
+  putStrLn "\t0 : Aucun\n\t1 : Changer d'instrument\n\t2 : Mode de transposition\n\t3 : Mode miroir ?\n\t4 : Multiplier la durée du menuet\n\t5 : Changer l'appareil de sortie\n"
   c <- getChar
   case c of 
     '0' -> do 
