@@ -24,8 +24,8 @@ Ce Menu permet de changer la configuration de jeu d'un menuet.
     * Changer l'instrument (dans nos tests, cela ne marchait pas, nous pensons que c'est à cause de la fonction fournie, ou bien de notre fluidsynth)
     * Changer le mode de transposition
       * 0. Aucune transposition
-      * 1. Transposer de +12 demi tons
-      * 2. Transposer de -12 demi tons
+      * 1. Transposer de +12 demi-tons
+      * 2. Transposer de -12 demi-tons
       * 3. Transposer d'un nombre libre de tons (à saisir)
     * Mode mirroir ?
     * Multiplier la durée
