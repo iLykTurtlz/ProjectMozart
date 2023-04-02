@@ -10,34 +10,7 @@ import System.Random
 randomNumber :: (Int, Int) ->  IO Int
 randomNumber (inf, sup) = (+inf) . (`mod` ((sup +1) - inf)) <$> randomIO
 
-
---Fonctions utile pour savoir quelles valeurs de h sont raisonnables pour la fonction fmirror dans MusicLib
-estPlusAigue :: MusObj -> MusObj -> Bool
-
-
-estPlusGrave :: MusObj -> MusObj -> Bool
-
-
-getMinMaxHauteur :: [MusObj] -> (Int, Int)
-getMinMaxHauteur [] == (60,60)            --je sais déjà que do au milieu n'est ni la plus grave ni la plus aigue
-getMinMaxHauteur o:os = 
-  case 
-
-
-
-{-}
---Fonction qui choisit les mesures
-chooseMeasure::[MusObj]->Int -> MusObj
-chooseMeasure database measureNumber = do
-  --measureNumber dans [1,16]
-  --dans les "let..in" on transforme les variables ludiques en variables informatiques
-  alea <- randomNumber (2,12) 
-  let row = if measureNumber > 8 then alea-2+11 else alea-2 in
-    let column = (measureNumber-1) `mod` 8 in
-      let index = row * 8 + column in
-        database!!index
--}
-
+--Fonction de choix d'une mesure selon le jeu de Mozart
 chooseMeasure :: [MusObj] -> [[Int]] -> Int -> IO MusObj
 chooseMeasure database indices measureNumber = do
   alea <- randomNumber (2,12)

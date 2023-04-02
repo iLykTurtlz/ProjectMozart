@@ -9,7 +9,6 @@ import MusicLib
 import Text.Read 
 import DataBase
 
---À COMPLÉTER
 
 --Fonction menu, avec un paramètre de type GameConfig, fonction qui affiche un menu, et selon le choix,
 --fait l'action souhaitée.
@@ -87,7 +86,7 @@ menuConfig config = do
         m <- getChar
         case m of 
             'y'->do
-                putStrLn "\t\t\tÀ partir de quelle hauteur de note souhaitez vous faire ce miroir\n\t\t\t*Attenttion : si la hauteur est trop faible ou trop élevée, vous risque de ne pas entendre toutes les notes...\n\t\t\t*Rappel : 60 est la hauteur du \"do du milieu\" sur un piano :)"
+                putStrLn "\t\t\t~À partir de quelle hauteur de note souhaitez vous faire ce miroir\n\t\t\t*Attenttion : si la hauteur est trop faible ou trop élevée, vous risque de ne pas entendre toutes les notes...\n\t\t\t*Rappel : 60 est la hauteur du \"do du milieu\" sur un piano :)"
                 h <- validateIntegralInput 
                 let newConfigH = execState (changeHMirror h) config in 
                   let newConfig = execState (changeMirror True) newConfigH in
@@ -171,7 +170,6 @@ performMeasure config stream i = do
         in 
           let mesureStretch = (stretch mesureTranspose (f config))
             in do 
-              putStrLn ("\nOn joue la mesure " ++ (show mesureStretch))     --AFFICHAGE POUR TESTS 
               play mesureStretch stream
   performMeasure config stream (i-1)
     
