@@ -8,7 +8,7 @@ import System.Random
 
 --Fonction aléatoire
 randomNumber :: (Int, Int) ->  IO Int
-randomNumber (inf, sup) = (+inf) . (`mod` (sup - inf)) <$> randomIO
+randomNumber (inf, sup) = (+inf) . (`mod` ((sup+1) - inf)) <$> randomIO
 
 --Fonction de choix d'une mesure selon le jeu de Mozart
 chooseMeasure :: [MusObj] -> [[Int]] -> Int -> IO MusObj
@@ -21,7 +21,7 @@ chooseMeasure database indices measureNumber = do
   if measureNumber > 8 then 
     putStrLn ("Index "++(show (  ((indices !! (alea-2+11)) !! ((measureNumber-1) `mod` 8)) -1 )))
   else
-    putStrLn ("Index "++(show ((indices !! (alea-2)) !! ((measureNumber-1) `mod` 8))))
+    putStrLn ("Index "++(show ((indices !! (alea-2)) !! ((measureNumber-1) `mod` 8) -1  )))
   
   let row = if measureNumber > 8 then alea-2+11 else alea-2
       column = (measureNumber-1) `mod` 8
